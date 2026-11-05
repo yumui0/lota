@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultats CSV – League of the Ancients</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="navbar-brand animate-glow" href="index.html">⚔ League of the Ancients</a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="formulaire.html">Analyser un joueur</a></li>
+        <li><a href="upload.html">Import CSV</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="container mt-24" id="flash" hidden><ul class="flash-list"><li class="flash-msg error" id="flash-msg"></li></ul></div>
+  <main>
+
+<section class="hero hero--sm">
+  <div class="hero-bg hero-bg--results"></div>
+  <div class="hero-bg-fallback"></div>
+  <div class="hero-content">
+    <div class="hero-sub">Analyse terminée</div>
+    <div class="hero-divider"></div>
+    <h1 class="hero-title hero-title--sm">
+      <span id="total">0</span>
+    </h1>
+  </div>
+</section>
+
+<section class="results-section">
+  <div class="container">
+
+        <div class="tour-bar animate-fade-up" id="tour-bar"></div>
+
+    <div class="flex flex-between flex-wrap gap-16 mb-24 animate-fade-up" style="animation-delay:.1s">
+      <a href="#" class="btn btn-primary btn-sm dl-csv">
+        ↓ Télécharger le CSV résultat
+      </a>
+      <div class="search-wrap">
+        <input type="text" id="table-search" placeholder="Rechercher un pseudo…" class="search-input">
+        <span class="search-icon">🔍</span>
+      </div>
+    </div>
+
+    <div class="card animate-fade-up card--flush" style="animation-delay:.2s">
+      <div class="results-table-wrap">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>#</th><th>Pseudo</th><th>Frags</th><th>Deaths</th>
+              <th>PowerUp</th><th>CovDist</th><th>Niveau</th><th>Tour d'entrée</th>
+            </tr>
+          </thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="flex flex-between flex-wrap gap-16 mt-24">
+      <a href="upload.html" class="btn btn-secondary">← Nouveau fichier</a>
+      <a href="#" class="btn btn-primary dl-csv">↓ Télécharger les résultats CSV</a>
+    </div>
+
+  </div>
+</section>
+
+</main>
+  <footer><span>League of the Ancients</span> &nbsp;·&nbsp; Mini Projet NSI &nbsp;·&nbsp; Sabrine EL</footer>
+</div>
+<script src="js/main.js"></script>
+<script src='js/data.js'></script><script src='js/kppv.js'></script>
+<script>
+(function(){
+  let results = [];
+  try { results = JSON.parse(sessionStorage.getItem('lota-results') || '[]'); } catch(e){}
+  if (!results.length) { location.replace('upload.html'); return; }
+  const n = results.length;
+  document.getElementById('total').textContent = n + ' participant' + (n>1?'s':'') + ' classé' + (n>1?'s':'');
+  const counts = {}; results.forEach(r => counts[r.niveau] = (counts[r.niveau]||0)+1);
+  document.getElementById('tour-bar').innerHTML = Object.keys(TOUR_MAP).map(c =>
+    `<div class="tour-bar-item tour-bar-item--${c.toLowerCase()}" style="color:var(--${c.toLowerCase()})">
+      <img src="images/${c.toLowerCase()}.png" alt="${c}" class="tour-bar-img">
+      <div class="tour-bar-count">${counts[c]||0}</div><div class="tour-bar-cat">${c}</div><div class="tour-bar-name">${TOUR_MAP[c]}</div></div>`).join('');
+  document.getElementById('tbody').innerHTML = results.map((r,i) =>
+    `<tr><td class="td-index">${i+1}</td><td class="td-pseudo">${esc(r.pseudo)}</td><td>${r.frags}</td><td>${r.death}</td><td>${r.powerup}</td><td>${r.covdist}</td>
+     <td><span class="badge badge-${r.niveau}">${r.niveau}</span></td><td class="td-tour" style="color:${r.color}">${r.tour}</td></tr>`).join('');
+  document.querySelectorAll('.dl-csv').forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const url = URL.createObjectURL(new Blob([resultsToCSV(results)], {type:'text/csv;charset=utf-8'}));
+    const l = document.createElement('a'); l.href = url; l.download = 'resultats_lota.csv'; l.click(); URL.revokeObjectURL(url);
+  }));
+  const s = document.getElementById('table-search');
+  s.addEventListener('input', () => { const q = s.value.toLowerCase();
+    document.querySelectorAll('#tbody tr').forEach(r => r.style.display = r.textContent.toLowerCase().includes(q) ? '' : 'none'); });
+})();
+</script>
+</body>
+</html>

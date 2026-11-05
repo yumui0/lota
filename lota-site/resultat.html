@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Résultat – League of the Ancients</title>
+  <link rel="stylesheet" href="css/style.css">
+  <style>:root{--accent-color:#c9a84c;--accent-glow:#c9a84c55;}</style>
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="navbar-brand animate-glow" href="index.html">⚔ League of the Ancients</a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="formulaire.html">Analyser un joueur</a></li>
+        <li><a href="upload.html">Import CSV</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="container mt-24" id="flash" hidden><ul class="flash-list"><li class="flash-msg error" id="flash-msg"></li></ul></div>
+  <main>
+
+<section class="hero hero--sm">
+  <div class="hero-bg hero-bg--resultat"></div>
+  <div class="hero-bg-fallback hero-bg-fallback--accent"></div>
+  <div class="hero-content">
+    <div class="hero-sub">Résultat de l'analyse KPPV</div>
+    <div class="hero-divider"></div>
+    <h1 class="hero-title hero-title--sm hero-title--accent">
+      <span id="r-pseudo"></span>
+    </h1>
+  </div>
+</section>
+
+<section class="result-section">
+  <div class="container result-container">
+
+    <div class="result-hero animate-fade-up">
+      <div class="result-pseudo">Classification KPPV (k=7)</div>
+      <img id="r-img" alt="" class="result-img">
+      <div class="result-categorie" id="r-cat"></div>
+      <div class="result-tour">Entrée au <strong id="r-tour"></strong></div>
+
+      <div class="tour-pills" id="r-pills"></div>
+    </div>
+
+    <div class="stats-grid animate-fade-up" style="animation-delay:.15s">
+      <div class="stat-box">
+        <div class="stat-val stat-val--accent"><span id="s-frags"></span></div>
+        <div class="stat-lbl">Frags / game</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val stat-val--accent"><span id="s-death"></span></div>
+        <div class="stat-lbl">Deaths / game</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val stat-val--accent"><span id="s-powerup"></span></div>
+        <div class="stat-lbl">PowerUp / game</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-val stat-val--accent"><span id="s-covdist"></span></div>
+        <div class="stat-lbl">CovDist / game</div>
+      </div>
+    </div>
+
+    <div class="result-actions animate-fade-up" style="animation-delay:.3s">
+      <a href="formulaire.html" class="btn btn-secondary">← Nouvelle analyse</a>
+      <a href="index.html" class="btn btn-secondary">🏠 Accueil</a>
+    </div>
+
+  </div>
+</section>
+
+</main>
+  <footer><span>League of the Ancients</span> &nbsp;·&nbsp; Mini Projet NSI &nbsp;·&nbsp; Sabrine EL</footer>
+</div>
+<script src="js/main.js"></script>
+<script src='js/data.js'></script><script src='js/kppv.js'></script>
+<script>
+(function(){
+  const q = new URLSearchParams(location.search);
+  const p = { pseudo: (q.get('pseudo')||'').trim() || 'Joueur Anonyme' };
+  for (const f of FEATURES) p[f] = parseFloat(q.get(f));
+  if (FEATURES.some(f => isNaN(p[f]))) { location.replace('formulaire.html'); return; }
+  const r = kppv(p, 7), col = COLOR_MAP[r.categorie];
+  document.title = 'Résultat – ' + p.pseudo + ' – League of the Ancients';
+  document.documentElement.style.setProperty('--accent-color', col);
+  document.documentElement.style.setProperty('--accent-glow', col + '55');
+  document.getElementById('r-pseudo').textContent = p.pseudo;
+  const img = document.getElementById('r-img'); img.src = 'images/' + r.categorie.toLowerCase() + '.png'; img.alt = r.categorie;
+  document.getElementById('r-cat').textContent = r.categorie;
+  document.getElementById('r-tour').textContent = r.tour;
+  FEATURES.forEach(f => document.getElementById('s-' + f).textContent = p[f]);
+  document.getElementById('r-pills').innerHTML = Object.keys(TOUR_MAP).map(c => {
+    const on = c === r.categorie, v = 'var(--' + c.toLowerCase() + ')';
+    return `<div class="tour-pill tour-pill--${c.toLowerCase()} ${on?'tour-pill--active':''}" style="border-color:${v};color:${v};${on?`background:${v}33;box-shadow:0 0 12px ${v}55;`:''}">${c}${on?'<br><span class="tour-pill-you">◀ vous</span>':''}</div>`;
+  }).join('');
+})();
+</script>
+</body>
+</html>

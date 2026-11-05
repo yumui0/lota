@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Import CSV – League of the Ancients</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="navbar-brand animate-glow" href="index.html">⚔ League of the Ancients</a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="formulaire.html">Analyser un joueur</a></li>
+        <li><a href="upload.html">Import CSV</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="container mt-24" id="flash" hidden><ul class="flash-list"><li class="flash-msg error" id="flash-msg"></li></ul></div>
+  <main>
+
+<section class="hero hero--sm">
+  <div class="hero-bg hero-bg--upload"></div>
+  <div class="hero-bg-fallback"></div>
+  <div class="hero-content">
+    <div class="hero-sub">Analyse en masse</div>
+    <div class="hero-divider"></div>
+    <h1 class="hero-title hero-title--sm">Import CSV</h1>
+  </div>
+</section>
+
+<section class="upload-section">
+  <div class="container upload-container">
+    <div class="card animate-fade-up">
+
+      <form id="upload-form">
+        <div class="upload-zone" id="upload-zone">
+          <input type="file" id="csv_file" name="csv_file" accept=".csv">
+          <label for="csv_file" class="upload-label">
+            <span class="upload-icon">📄</span>
+            <span id="upload-filename">Choisir un fichier CSV</span>
+          </label>
+        </div>
+      </form>
+
+      <div class="divider"></div>
+
+      <div class="flex flex-between flex-wrap gap-16">
+        <a href="index.html" class="btn btn-secondary">← Retour</a>
+        <div class="flex gap-16 flex-wrap">
+          <button type="button" id="gen-btn" class="btn btn-secondary">🎲 500 joueurs aléatoires</button>
+          <button type="submit" form="upload-form" class="btn btn-primary">↑ Analyser</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+
+</main>
+  <footer><span>League of the Ancients</span> &nbsp;·&nbsp; Mini Projet NSI &nbsp;·&nbsp; Sabrine EL</footer>
+</div>
+<script src="js/main.js"></script>
+<script src='js/data.js'></script><script src='js/kppv.js'></script>
+
+<script>
+  const zone  = document.getElementById('upload-zone');
+  const input = document.getElementById('csv_file');
+  const label = document.getElementById('upload-filename');
+
+  input.addEventListener('change', () => {
+    label.textContent = input.files[0]?.name || 'Choisir un fichier CSV';
+  });
+  zone.addEventListener('dragover',  e => { e.preventDefault(); zone.classList.add('drag-over'); });
+  zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+  zone.addEventListener('drop', e => {
+    e.preventDefault();
+    zone.classList.remove('drag-over');
+    if (e.dataTransfer.files[0]) {
+      const dt = new DataTransfer();
+      dt.items.add(e.dataTransfer.files[0]);
+      input.files = dt.files;
+      label.textContent = e.dataTransfer.files[0].name;
+    }
+  });
+
+  function flash(m){const f=document.getElementById('flash');document.getElementById('flash-msg').textContent=m;f.hidden=false;}
+  function go(results){sessionStorage.setItem('lota-results',JSON.stringify(results));location.href='resultats.html';}
+  document.getElementById('upload-form').addEventListener('submit', async e => {
+    e.preventDefault();
+    const f = input.files[0];
+    if (!f) return flash('Aucun fichier sélectionné.');
+    try { go(classifyBatch(parseParticipants(await f.text()))); }
+    catch (err) { flash('Erreur lors de la lecture du fichier : ' + err.message); }
+  });
+  document.getElementById('gen-btn').addEventListener('click', () => go(classifyBatch(generateTournament(500))));
+</script>
+
+</body>
+</html>

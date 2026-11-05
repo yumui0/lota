@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accueil – League of the Ancients</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+</head>
+<body>
+<div class="page-wrapper">
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a class="navbar-brand animate-glow" href="index.html">⚔ League of the Ancients</a>
+      <ul class="navbar-links">
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="formulaire.html">Analyser un joueur</a></li>
+        <li><a href="upload.html">Import CSV</a></li>
+      </ul>
+      <button class="nav-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="container mt-24" id="flash" hidden><ul class="flash-list"><li class="flash-msg error" id="flash-msg"></li></ul></div>
+  <main>
+
+<section class="hero">
+  <div class="hero-bg hero-bg--home"></div>
+  <div class="hero-bg-fallback"></div>
+  <div class="hero-content">
+    <div class="hero-sub">Numérique et Sciences Informatiques</div>
+    <div class="hero-divider"></div>
+    <h1 class="hero-title">League of the<br>Ancients</h1>
+    <div class="hero-divider"></div>
+    <p class="hero-sub hero-sub--mt">Système de classement KPPV · Tournoi annuel</p>
+    <div class="hero-cta">
+      <a href="formulaire.html" class="btn btn-primary">⚔ Analyser un joueur</a>
+      <a href="upload.html"     class="btn btn-secondary">↑ Import CSV</a>
+    </div>
+  </div>
+</section>
+
+<section class="bracket-section">
+  <div class="container">
+    <h2 class="section-heading">Structure du tournoi</h2>
+    <p class="section-sub">Chaque niveau détermine le tour d'entrée du joueur dans la compétition</p>
+
+    <div class="bracket-track">
+
+      <div class="bracket-step animate-fade-up">
+        <div class="bracket-node step-tomato">
+          <div class="bracket-img-slot">
+            <img src="images/tomato.png" alt="Tomato">
+          </div>
+          <div class="bracket-label bracket-label--tomato">Tomato</div>
+          <div class="bracket-tour">1<sup>er</sup> Tour</div>
+          <div class="bracket-pct">Derniers 15%</div>
+        </div>
+      </div>
+
+      <div class="bracket-step animate-fade-up">
+        <div class="bracket-node step-mauvais">
+          <div class="bracket-img-slot">
+            <img src="images/mauvais.png" alt="Mauvais">
+          </div>
+          <div class="bracket-label bracket-label--mauvais">Mauvais</div>
+          <div class="bracket-tour">2<sup>ème</sup> Tour</div>
+          <div class="bracket-pct">20% suivants</div>
+        </div>
+      </div>
+
+      <div class="bracket-step animate-fade-up">
+        <div class="bracket-node step-moyen">
+          <div class="bracket-img-slot">
+            <img src="images/moyen.png" alt="Moyen">
+          </div>
+          <div class="bracket-label bracket-label--moyen">Moyen</div>
+          <div class="bracket-tour">3<sup>ème</sup> Tour</div>
+          <div class="bracket-pct">30% suivants</div>
+        </div>
+      </div>
+
+      <div class="bracket-step animate-fade-up">
+        <div class="bracket-node step-bon">
+          <div class="bracket-img-slot">
+            <img src="images/bon.png" alt="Bon">
+          </div>
+          <div class="bracket-label bracket-label--bon">Bon</div>
+          <div class="bracket-tour">4<sup>ème</sup> Tour</div>
+          <div class="bracket-pct">25% suivants</div>
+        </div>
+      </div>
+
+      <div class="bracket-step animate-fade-up">
+        <div class="bracket-node step-unicum">
+          <div class="bracket-img-slot">
+            <img src="images/unicum.png" alt="Unicum">
+          </div>
+          <div class="bracket-label bracket-label--unicum">Unicum</div>
+          <div class="bracket-tour">Tour Ultime</div>
+          <div class="bracket-pct">Top 10%</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="gallery-section">
+  <div class="container">
+    <h2 class="section-heading">Dans l'arène</h2>
+    <p class="section-sub">Aperçu des combats du tournoi League of the Ancients</p>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="images/game1.jpg" alt="Combat en forêt">
+        <div class="gallery-caption">Combat en forêt</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/game2.jpg" alt="Duel côtier">
+        <div class="gallery-caption">Duel côtier – Rang Bon</div>
+      </div>
+      <div class="gallery-item">
+        <img src="images/game3.jpg" alt="Magma Titan">
+        <div class="gallery-caption">Boss Magma Titan – Tour Ultime</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-section">
+  <div class="container">
+    <div class="divider"></div>
+    <h2 class="section-heading section-heading--mt">Prêt à connaître votre rang ?</h2>
+    <p class="section-sub">Entrez vos statistiques et l'algorithme KPPV vous classera instantanément</p>
+    <a href="formulaire.html" class="btn btn-primary btn-lg">
+      ⚔ Commencer l'analyse
+    </a>
+  </div>
+</section>
+
+</main>
+  <footer><span>League of the Ancients</span> &nbsp;·&nbsp; Mini Projet NSI &nbsp;·&nbsp; Sabrine EL</footer>
+</div>
+<script src="js/main.js"></script>
+
+
+</body>
+</html>
